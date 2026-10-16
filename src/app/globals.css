@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Saffron & Ash — global styles
+  Tokens live in tailwind.config.ts; CSS custom properties below are used by
+  raw CSS (focus rings, reveal animation) that can't reference Tailwind classes.
+*/
+
+:root {
+  --cream: #f7f2ea;
+  --ink: #22201d;
+  --ink-soft: #5b564d;
+  --terracotta: #b5532e;
+  --line: #ddd3c2;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream text-ink font-body antialiased;
+  }
+
+  ::selection {
+    background: var(--terracotta);
+    color: var(--cream);
+  }
+
+  /* Visible, consistent focus ring (WCAG) */
+  :focus-visible {
+    outline: 2px solid var(--terracotta);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-variation-settings: 'SOFT' 0, 'WONK' 0;
+  }
+}
+
+@layer components {
+  /* Page container */
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8 lg:px-10;
+  }
+
+  /* Section eyebrow — small caps label above headings */
+  .eyebrow {
+    @apply text-[0.6875rem] font-medium uppercase tracking-[0.22em] text-terracotta;
+  }
+
+  /* Dotted price leader used in menu lists */
+  .leader {
+    @apply mx-3 flex-1 self-end border-b border-dotted border-line;
+    margin-bottom: 0.35em;
+  }
+
+  /* Editorial body text */
+  .prose-editorial p {
+    @apply text-ink-soft leading-[1.75];
+  }
+
+  .prose-editorial p + p {
+    @apply mt-4;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-card bg-terracotta px-6 py-3 text-sm font-medium tracking-wide text-cream transition-colors duration-200 hover:bg-terracotta-dark;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-card border border-ink/25 px-6 py-3 text-sm font-medium tracking-wide text-ink transition-colors duration-200 hover:border-terracotta hover:text-terracotta;
+  }
+
+  /* Form fields */
+  .field-label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-[0.14em] text-ink-soft;
+  }
+
+  .field-input {
+    @apply w-full rounded-card border border-line bg-paper px-4 py-3 text-[0.9375rem] text-ink placeholder:text-ink-faint transition-colors duration-150 focus:border-terracotta focus:outline-none focus-visible:outline-terracotta;
+  }
+
+  .field-error {
+    @apply mt-1.5 flex items-center gap-1.5 text-[0.8125rem] text-terracotta-dark;
+  }
+}
+
+@layer utilities {
+  /* Hide the horizontal scrollbar on the mobile tab strip (tabs stay scrollable) */
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Scroll reveal — applied by <Reveal/>, respects reduced motion */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
